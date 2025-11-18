@@ -4,8 +4,17 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+/**
+ * Represents a Task entity stored in the database.
+ * Lombok annotations are used to reduce boilerplate code for:
+ * - constructors
+ * - getters and setters
+ * - builder pattern support
+ */
 @Entity
-@Getter @Setter
+@Table(name = "tasks")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -20,5 +29,5 @@ public class Task {
 
     private String description;
 
-    private boolean completed = false;
+    private boolean completed;
 }
