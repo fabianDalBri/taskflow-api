@@ -44,4 +44,15 @@ public class TaskController {
     public void delete(@PathVariable Long id) {
         service.deleteTask(id);
     }
+
+    @PatchMapping("/{id}/complete")
+    public Task markAsCompleted(@PathVariable Long id) {
+        return service.markTaskAsCompleted(id);
+    }
+
+    @PatchMapping("/{id}/uncompleted")
+    public Task markAsUncompleted(@PathVariable Long id) {
+        return service.markTaskAsUncompleted(id);
+    }
+
 }

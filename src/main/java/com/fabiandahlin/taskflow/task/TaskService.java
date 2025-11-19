@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskService {
 
-    private final TaskRepository repository;
+    private final TaskRepository repository; //this is the DB
 
     public List<Task> getAllTasks() {
         return repository.findAll();
@@ -37,5 +37,17 @@ public class TaskService {
 
     public void deleteTask(Long id) {
         repository.deleteById(id);
+    }
+
+    public Task markTaskAsCompleted(Long id) {
+        Task task = getTask(id);
+        task.setCompleted(true);
+        return repository.save(task);
+    }
+
+    public Task markTaskAsUncompleted(Long id) {
+        Task task = getTask(id);
+        task.setCompleted(false);
+        return repository.save(task);
     }
 }
