@@ -14,3 +14,12 @@ This project was created to practice real backend development patterns such as:
 - Professional project structure
 
 This backend is designed to be simple and clean
+
+Technologies used:
+Java 17
+Spring Boot 3
+Spring Data JPA
+H2 Database
+Lombok
+Maven
+REST API architecture
