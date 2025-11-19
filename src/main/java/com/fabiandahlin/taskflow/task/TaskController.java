@@ -1,5 +1,6 @@
 package com.fabiandahlin.taskflow.task;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
@@ -36,7 +37,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task create(@RequestBody Task task) {
+    public Task create(@Valid @RequestBody Task task) {
         return service.createTask(task);
     }
 
