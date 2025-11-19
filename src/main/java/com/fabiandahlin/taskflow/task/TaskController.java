@@ -2,6 +2,8 @@ package com.fabiandahlin.taskflow.task;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -21,8 +23,11 @@ public class TaskController {
     private final TaskService service;
 
     @GetMapping
-    public List<Task> getAll() {
-        return service.getAllTasks();
+    public Page<Task> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return service.getTasksPaged(page, size);
     }
 
     @GetMapping("/{id}")
@@ -67,4 +72,5 @@ public class TaskController {
     public List<Task> search(@RequestParam("q") String query) {
         return service.searchTasks(query);
     }
+
 }

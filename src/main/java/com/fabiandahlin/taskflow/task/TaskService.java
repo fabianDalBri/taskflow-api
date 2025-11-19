@@ -2,6 +2,9 @@ package com.fabiandahlin.taskflow.task;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -77,4 +80,10 @@ public class TaskService {
     public List<Task> searchTasks(String query) {
         return repository.findByTitleContainingIgnoreCase(query);
     }
+
+    public Page<Task> getTasksPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return repository.findAll(pageable);
+    }
+
 }
