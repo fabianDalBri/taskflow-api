@@ -32,6 +32,7 @@ public class TaskService {
         existing.setTitle(updated.getTitle());
         existing.setDescription(updated.getDescription());
         existing.setCompleted(updated.isCompleted());
+        existing.setPriority(updated.getPriority());
         return repository.save(existing);
     }
 

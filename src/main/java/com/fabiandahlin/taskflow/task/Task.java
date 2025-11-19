@@ -3,6 +3,8 @@ package com.fabiandahlin.taskflow.task;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -41,4 +43,7 @@ public class Task {
 
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
+
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
 }
