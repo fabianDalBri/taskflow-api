@@ -55,4 +55,11 @@ public class TaskController {
         return service.markTaskAsUncompleted(id);
     }
 
+    @PatchMapping("/{id}")
+    public Task partialUpdate(
+            @PathVariable Long id,
+            @RequestBody TaskUpdateRequest request
+    ) {
+        return service.partialUpdateTask(id, request);
+    }
 }

@@ -51,4 +51,27 @@ public class TaskService {
         task.setCompleted(false);
         return repository.save(task);
     }
+
+    public Task partialUpdateTask(Long id, TaskUpdateRequest request) {
+        Task existing = getTask(id);
+
+        if (request.getTitle() != null) {
+            existing.setTitle(request.getTitle());
+        }
+
+        if (request.getDescription() != null) {
+            existing.setDescription(request.getDescription());
+        }
+
+        if (request.getCompleted() != null) {
+            existing.setCompleted(request.getCompleted());
+        }
+
+        if (request.getPriority() != null) {
+            existing.setPriority(request.getPriority());
+        }
+
+        return repository.save(existing);
+    }
+
 }
