@@ -74,4 +74,7 @@ public class TaskService {
         return repository.save(existing);
     }
 
+    public List<Task> searchTasks(String query) {
+        return repository.findByTitleContainingIgnoreCase(query);
+    }
 }

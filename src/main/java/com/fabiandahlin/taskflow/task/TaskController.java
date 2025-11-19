@@ -62,4 +62,9 @@ public class TaskController {
     ) {
         return service.partialUpdateTask(id, request);
     }
+
+    @GetMapping("/search")
+    public List<Task> search(@RequestParam("q") String query) {
+        return service.searchTasks(query);
+    }
 }
