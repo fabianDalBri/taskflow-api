@@ -1,10 +1,15 @@
 package com.fabiandahlin.taskflow.task;
 
+import com.fabiandahlin.taskflow.task.dto.TaskUpdateRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.fabiandahlin.taskflow.task.dto.TaskRequest;
+import com.fabiandahlin.taskflow.task.dto.TaskResponse;
+import com.fabiandahlin.taskflow.task.dto.TaskUpdateRequest;
+
 
 import java.util.List;
 
@@ -24,21 +29,24 @@ public class TaskController {
     private final TaskService service;
 
     @GetMapping
-    public Page<Task> getAll(
+    public Page<TaskResponse> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return service.getTasksPaged(page, size);
+        return service.getTasksPaged(page, size)
+                .map(TaskMapper::toResponse);
     }
 
     @GetMapping("/{id}")
-    public Task getOne(@PathVariable Long id) {
-        return service.getTask(id);
+    public TaskResponse getOne(@PathVariable Long id) {
+        return TaskMapper.toResponse(service.getTask(id));
     }
 
     @PostMapping
-    public Task create(@Valid @RequestBody Task task) {
-        return service.createTask(task);
+    public TaskResponse create(@Valid @RequestBody TaskRequest request) {
+        Task entity = TaskMapper.toEntity(request);
+        Task created = service.createTask(entity);
+        return TaskMapper.toResponse(created);
     }
 
     @PutMapping("/{id}")
@@ -62,10 +70,7 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}")
-    public Task partialUpdate(
-            @PathVariable Long id,
-            @RequestBody TaskUpdateRequest request
-    ) {
+    public Task partialUpdate(@PathVariable Long id, @RequestBody TaskUpdateRequest request) {
         return service.partialUpdateTask(id, request);
     }
 

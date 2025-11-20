@@ -1,5 +1,6 @@
-package com.fabiandahlin.taskflow.task;
+package com.fabiandahlin.taskflow.task.dto;
 
+import com.fabiandahlin.taskflow.task.Priority;
 import lombok.Getter;
 import lombok.Setter;
 

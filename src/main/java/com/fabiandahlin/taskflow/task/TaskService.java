@@ -1,5 +1,6 @@
 package com.fabiandahlin.taskflow.task;
 
+import com.fabiandahlin.taskflow.task.dto.TaskUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
