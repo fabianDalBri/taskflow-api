@@ -1,6 +1,7 @@
 package com.fabiandahlin.taskflow.task;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fabiandahlin.taskflow.task.dto.TaskRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -8,61 +9,57 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Integration tests for TaskController.
- *
- * These tests start a full Spring Boot context and use MockMvc to simulate
- * real HTTP calls against the /tasks endpoint. The goal is to verify that the
- * controller, service, repository and JSON mapping all work together.
+ * Integration test for TaskController using DTOs.
+ * This verifies full serialization/deserialization via TaskRequest and TaskResponse.
  */
-@SpringBootTest            // Start the whole Spring Boot application (in-memory)
-@AutoConfigureMockMvc      // Configure MockMvc so we can perform HTTP requests in tests
+@SpringBootTest
+@AutoConfigureMockMvc
 class TaskControllerIT {
 
     @Autowired
-    private MockMvc mockMvc;          // Used to perform fake HTTP requests
+    private MockMvc mockMvc;
 
     @Autowired
-    private ObjectMapper objectMapper; // Used to convert Java objects <-> JSON
+    private ObjectMapper objectMapper;
 
     @Autowired
-    private TaskRepository taskRepository; // Real repository backed by H2 in-memory DB
+    private TaskRepository taskRepository;
 
     @Test
-    void createTask_returnsOk_andPersistsInDatabase() throws Exception {
-        // Arrange: ensure database is empty before test (clean state)
+    void createTask_usesDTOs_andPersistsToDatabase() throws Exception {
+        // Clean DB before test
         taskRepository.deleteAll();
 
-        // Build a Task object that represents the JSON body we want to send
-        Task task = Task.builder()
-                .title("Integration test task")
-                .description("Created from integration test")
-                .completed(false)
-                .priority(Priority.LOW)
-                .build();
+        // Build the DTO we want to send in the request body
+        TaskRequest request = new TaskRequest();
+        request.setTitle("Integration Test Task");
+        request.setDescription("Created through integration test");
+        request.setCompleted(false);
+        request.setPriority(Priority.LOW);
 
-        // Convert the Task object into a JSON string
-        String jsonBody = objectMapper.writeValueAsString(task);
+        // Convert DTO -> JSON
+        String jsonBody = objectMapper.writeValueAsString(request);
 
-        // Act + Assert: perform HTTP POST /tasks with the JSON body
-        mockMvc.perform(post("/tasks")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonBody))
-                // Expect HTTP 200 OK (or change to isCreated() if your controller returns 201)
-                .andExpect(status().isOk())
-                // Response should be JSON
+        // Perform POST /tasks with JSON body
+        mockMvc.perform(
+                        post("/tasks")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonBody)
+                )
+                .andExpect(status().isOk()) // Or .isCreated() if you change controller later
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                // Verify that the response JSON contains the same title
-                .andExpect(jsonPath("$.title").value("Integration test task"))
-                // Verify that the response has an id field (meaning it was saved)
-                .andExpect(jsonPath("$.id").isNumber());
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.title").value("Integration Test Task"))
+                .andExpect(jsonPath("$.description").value("Created through integration test"))
+                .andExpect(jsonPath("$.completed").value(false))
+                .andExpect(jsonPath("$.priority").value("LOW"));
 
-        // Extra assertion: verify that exactly one task exists in the database now
-        long count = taskRepository.count();
-        assertEquals(1, count, "Exactly one Task should have been persisted in the database");
+        // Optional: verify DB side effects
+        assertEquals(1, taskRepository.count());
     }
 }

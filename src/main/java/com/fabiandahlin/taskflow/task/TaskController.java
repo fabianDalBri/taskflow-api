@@ -60,23 +60,34 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}/complete")
-    public Task markAsCompleted(@PathVariable Long id) {
-        return service.markTaskAsCompleted(id);
+    public TaskResponse markAsCompleted(@PathVariable Long id) {
+        Task updated = service.markTaskAsCompleted(id);
+        return TaskMapper.toResponse(updated);
     }
 
     @PatchMapping("/{id}/uncompleted")
-    public Task markAsUncompleted(@PathVariable Long id) {
-        return service.markTaskAsUncompleted(id);
+    public TaskResponse markAsUncompleted(@PathVariable Long id) {
+        Task updated = service.markTaskAsUncompleted(id);
+        return TaskMapper.toResponse(updated);
     }
 
     @PatchMapping("/{id}")
-    public Task partialUpdate(@PathVariable Long id, @RequestBody TaskUpdateRequest request) {
-        return service.partialUpdateTask(id, request);
+    public TaskResponse partialUpdate(
+            @PathVariable Long id,
+            @RequestBody TaskUpdateRequest request
+    ) {
+        Task updated = service.partialUpdateTask(id, request);
+        return TaskMapper.toResponse(updated);
     }
 
     @GetMapping("/search")
-    public List<Task> search(@RequestParam("q") String query) {
-        return service.searchTasks(query);
+    public Page<TaskResponse> search(
+            @RequestParam("q") String query,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return service.searchTasks(query, page, size)
+                .map(TaskMapper::toResponse);
     }
 
 }
