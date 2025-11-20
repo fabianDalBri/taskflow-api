@@ -12,9 +12,11 @@ This project was created to practice real backend development patterns such as:
 - Enum fields (priority)
 - Search endpoints
 - Professional project structure
-
-This backend is designed to be simple and clean
-
+- Integration & Unit Tests
+-   Includes:
+-   Unit tests for service layer (business logic)
+-   Integration tests for controller layer using MockMvc and H2 database
+---
 Technologies used:
 - Java 17
 - Spring Boot 3
