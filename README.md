@@ -12,10 +12,8 @@ This project was created to practice real backend development patterns such as:
 - Enum fields (priority)
 - Search endpoints
 - Professional project structure
-- Integration & Unit Tests
-    Includes:
-    Unit tests for service layer (business logic)
-    Integration tests for controller layer using MockMvc and H2 database
+- Unit tests for service layer (business logic)
+- Integration tests for controller layer using MockMvc and H2 database
 ---
 Technologies used:
 - Java 17
