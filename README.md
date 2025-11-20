@@ -13,15 +13,16 @@ This project was created to practice real backend development patterns such as:
 - Search endpoints
 - Professional project structure
 - Integration & Unit Tests
--   Includes:
--   Unit tests for service layer (business logic)
--   Integration tests for controller layer using MockMvc and H2 database
+    Includes:
+    Unit tests for service layer (business logic)
+    Integration tests for controller layer using MockMvc and H2 database
 ---
 Technologies used:
 - Java 17
 - Spring Boot 3
 - Spring Data JPA
-- H2 Database
+- H2 In-Memory Database
 - Lombok
 - Maven
 - REST API architecture
+- MockMvc
