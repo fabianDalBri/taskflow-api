@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 
 import java.util.List;
 
@@ -78,8 +80,15 @@ public class TaskService {
         return repository.save(existing);
     }
 
-    public List<Task> searchTasks(String query) {
-        return repository.findByTitleContainingIgnoreCase(query);
+    public Page<Task> searchTasks(String query, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+
+        if (query == null || query.isBlank()) {
+            // If query is empty, just return all tasks paged
+            return repository.findAll(pageable);
+        }
+
+        return repository.findByTitleContainingIgnoreCase(query, pageable);
     }
 
     public Page<Task> getTasksPaged(int page, int size) {
