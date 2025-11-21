@@ -12,6 +12,7 @@ This project was created to practice real backend development patterns such as:
 - Enum fields (priority)
 - Search endpoints
 - Professional project structure
+- CI
 - Unit tests for service layer (business logic)
 - Integration tests for controller layer using MockMvc and H2 database
 ---
