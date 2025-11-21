@@ -24,4 +24,7 @@ Technologies used:
 - Maven
 - REST API architecture
 - MockMvc
-- CI
+- CI/CD
+---
+Since i'm running an in-memory db, tasks may not show up:
+https://taskflow-api-uxnp.onrender.com/tasks
