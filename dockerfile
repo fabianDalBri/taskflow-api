@@ -1,7 +1,6 @@
-# Use a lightweight JVM base image
-FROM eclipse-temurin:17-jdk-alpine
+# 1️ Build stage
+FROM eclipse-temurin:17-jdk-alpine AS build
 
-# Set working directory
 WORKDIR /app
 
 # Copy Maven wrapper and pom.xml
@@ -9,17 +8,27 @@ COPY .mvn/ .mvn/
 COPY mvnw .
 COPY pom.xml .
 
-# Download dependencies first (cached)
+# Ensure mvnw is executable
+RUN chmod +x mvnw
+
+# Download dependencies (cached)
 RUN ./mvnw dependency:go-offline
 
-# Copy the project source
+# Copy project source
 COPY src ./src
 
 # Build application
 RUN ./mvnw -DskipTests package
 
-# Expose port
+# 2 Runtime stage
+FROM eclipse-temurin:17-jdk-alpine
+
+WORKDIR /app
+
+# Copy the JAR from the build stage
+COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
 
-# Run the app
-CMD ["java", "-jar", "target/taskflow-api-0.0.1-SNAPSHOT.jar"]
+# Run the Spring Boot application
+CMD ["java", "-jar", "app.jar"]
