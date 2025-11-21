@@ -30,3 +30,11 @@ jobs:
       # 4. Buid project
       - name: Build with Maven
         run: mvn -B package
+
+      # 5. Package JAR and upload artifact
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: taskflow-api-jar
+          path: target/*.jar
+
