@@ -18,7 +18,7 @@ COPY src ./src
 # Build application
 RUN ./mvnw -DskipTests package
 
-# Expose port (Render will override with PORT env variable)
+# Expose port
 EXPOSE 8080
 
 # Run the app
